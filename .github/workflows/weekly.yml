@@ -4,11 +4,20 @@ on:
     - cron:  '20 9 * * WED'
   workflow_dispatch:
 jobs:
-  test:
+  scheduling:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 3.0.2
-    - run: ruby scheduler.rb
+    - name: scheduling
+      run: ruby scheduler.rb
+    - name: Commit new schedule
+      run: |
+        if ! git diff --exit-code --quiet
+        then
+          git add schedule.json
+          git config --local user.email "yshoji@launchableinc.com"
+          git config --local user.name "yoshiori"
+          git commit -m "Update schedule.json"
+          git push origin main
+        fi
