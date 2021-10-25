@@ -10,7 +10,10 @@ jobs:
     - uses: actions/checkout@v2
     - uses: ruby/setup-ruby@v1
     - name: scheduling
-      run: ruby scheduler.rb
+      id: scheduling
+      run: |
+        index=$(ruby scheduler.rb)
+        echo "::set-output name=CURRENT_INDEX::${index}"
     - name: Commit new schedule
       run: |
         if ! git diff --exit-code --quiet
@@ -21,3 +24,11 @@ jobs:
           git commit -m "Update schedule.json"
           git push origin main
         fi
+    - name: Notify current
+      run: |
+        assignee=$(cat schedule.json | jq -r .[${{ steps.scheduling.outputs.CURRENT_INDEX }}].assignee)
+        start=$(cat schedule.json | jq -r .[${{ steps.scheduling.outputs.CURRENT_INDEX }}].start)
+        end=$(cat schedule.json | jq -r .[${{ steps.scheduling.outputs.CURRENT_INDEX }}].end)
+        echo $assignee
+        echo $start
+        echo $end
