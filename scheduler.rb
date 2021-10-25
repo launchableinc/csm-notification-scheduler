@@ -15,9 +15,11 @@ this_assignee = schedules.first["assignee"]
 next_assignee = members[(members.index(this_assignee) + 1) % members.size]
 
 schedules.unshift(
-  start: this_cutoverday.iso8601,
-  end: next_cutoverday.iso8601,
-  assignee: next_assignee
+  "start" => this_cutoverday.iso8601,
+  "end" => next_cutoverday.iso8601,
+  "assignee" => next_assignee
 )
-puts JSON.pretty_generate(schedules)
 File.write(SCHEDULE_FILE ,JSON.pretty_generate(schedules))
+today = Date.today
+current_index = schedules.index {|schedule| (Date.parse(schedule["start"])..Date.parse(schedule["end"])).cover? today }
+p current_index
