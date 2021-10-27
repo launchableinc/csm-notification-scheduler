@@ -24,7 +24,7 @@ schedules.unshift(
 File.write(SCHEDULE_FILE, JSON.pretty_generate(schedules))
 
 cal = Icalendar::Calendar.new
-cal.append_custom_property("X-WR-CALNAME;VALUE=TEXT", "CSM Notification checker")
+cal.append_custom_property("X-WR-CALNAME;VALUE=TEXT", "CSM Notification schedule")
 schedules.each do |s|
   cal.event do |e|
     e.dtstart     = Icalendar::Values::Date.new(Date.parse(s["start"]))
