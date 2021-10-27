@@ -9,26 +9,19 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: ruby/setup-ruby@v1
+      with:
+        bundler-cache: true
     - name: scheduling
       id: scheduling
       run: |
-        index=$(ruby scheduler.rb)
-        echo "::set-output name=CURRENT_INDEX::${index}"
+        bundle exec ruby scheduler.rb
     - name: Commit new schedule
       run: |
         if ! git diff --exit-code --quiet
         then
-          git add schedule.json
+          git add schedule.json schedule.ics
           git config --local user.email "yshoji@launchableinc.com"
           git config --local user.name "yoshiori"
-          git commit -m "Update schedule.json"
+          git commit -m "Update schedule"
           git push origin main
         fi
-    - name: Notify current
-      run: |
-        assignee=$(cat schedule.json | jq -r .[${{ steps.scheduling.outputs.CURRENT_INDEX }}].assignee)
-        start=$(cat schedule.json | jq -r .[${{ steps.scheduling.outputs.CURRENT_INDEX }}].start)
-        end=$(cat schedule.json | jq -r .[${{ steps.scheduling.outputs.CURRENT_INDEX }}].end)
-        echo $assignee
-        echo $start
-        echo $end
