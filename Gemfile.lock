@@ -1,0 +1,15 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    icalendar (2.7.1)
+      ice_cube (~> 0.16)
+    ice_cube (0.16.4)
+
+PLATFORMS
+  x86_64-darwin-20
+
+DEPENDENCIES
+  icalendar
+
+BUNDLED WITH
+   2.2.22
