@@ -1,4 +1,4 @@
-# csm-notification-sucheduler
+# csm-notification-scheduler
 
 Program to automatically set the person in charge of csm-notification
 
